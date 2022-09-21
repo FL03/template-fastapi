@@ -53,6 +53,6 @@
 
 # Exceptions
 !**/default.config.*
-**/!*.env.example
-**/!*.config.js
-**/!*.config.cjs
+!**/*.env.example
+!**/*.config.js
+!**/*.config.cjs
