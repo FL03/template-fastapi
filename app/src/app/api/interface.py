@@ -5,17 +5,8 @@
         ... Summary ...
 """
 from fastapi import APIRouter
-from app.api.endpoints import users
+from app.api.endpoints import auth, users
 
-router = APIRouter(prefix='/api', tags=['v1'])
-router.include_router(users.router)
-
-
-@router.get("/login")
-async def login(username: str, password: str):
-    return dict(message="Success")
-
-
-@router.post("/token", tags=['default'])
-async def token():
-    return dict(token="")
+router = APIRouter(prefix='/', tags=['v1'])
+router.include_router(router=auth.router)
+router.include_router(router=users.router)

@@ -1,2 +1,2 @@
-__name__ = 'core'
-__package__ = 'app.core'
+from .session import Authorization, Session, session
+from .settings import Settings, settings

@@ -37,4 +37,4 @@ class Settings(BaseSettings):
 
 
 @lru_cache
-def session_settings() -> Settings: return Settings()
+def settings() -> Settings: return Settings()

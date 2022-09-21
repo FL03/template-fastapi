@@ -9,11 +9,11 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from tortoise.contrib.fastapi import register_tortoise
 
-from app.api import interface
-from app.core.settings import session_settings
+from app import api, core
 
 app: FastAPI = FastAPI()
-settings = session_settings()
+session: core.Session = core.session()
+settings: core.Settings = session.settings
 
 
 @app.on_event("startup")
@@ -33,14 +33,14 @@ async def shutdown():
     print("Terminating the application...")
 
 
-app.include_router(interface.router)
+app.include_router(router=api.api_router)
 
 register_tortoise(
     app,
     add_exception_handlers=True,
     db_url=settings.db_uri,
     generate_schemas=True,
-    modules=dict(models=['data.models'])
+    modules=dict(models=['app.data.models'])
 )
 
 
