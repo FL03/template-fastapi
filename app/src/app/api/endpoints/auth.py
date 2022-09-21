@@ -14,25 +14,21 @@ from typing import Union
 from app.core import Authorization, session
 from app.data.models import User, UserIn, Users, Token, TokenIn
 
-router = APIRouter(prefix='/', tags=['auth'])
+router = APIRouter(tags=['auth'])
 sesh = session()
 auth = Authorization()
 
 
-def get_user(username: str):
-    data = Users.get(username=username)
+async def get_user(username: str) -> UserIn:
+    data = await UserIn.from_queryset_single(Users.get(username=username))
     if data:
-        user_dict = data[username]
-        return UserIn(**user_dict)
+        return data
 
 
-def authenticate_user(fake_db, username: str, password: str):
-    user = get_user(fake_db, username)
-    if not user:
-        return False
-    if not auth.verify_password(password, user.hashed_password):
-        return False
-    return user
+async def authenticate_user(username: str, password: str) -> UserIn:
+    user = await get_user(username)
+    if user and auth.verify_password(password, user.hashed_password):
+        return user
 
 
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
@@ -46,9 +42,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     return encoded_jwt
 
 
-async def get_current_user(
-        security_scopes: SecurityScopes, token: str = Depends(auth.scheme)
-):
+async def get_current_user(security_scopes: SecurityScopes, token: str = Depends(auth.scheme)):
     if security_scopes.scopes:
         authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
     else:
@@ -67,7 +61,7 @@ async def get_current_user(
         token_data = Token(scopes=token_scopes, username=username)
     except (JWTError, ValidationError):
         raise credentials_exception
-    user = get_user(username=token_data.username)
+    user = await get_user(username=token_data.username)
     if user is None:
         raise credentials_exception
     for scope in security_scopes.scopes:
@@ -80,9 +74,7 @@ async def get_current_user(
     return user
 
 
-async def get_current_active_user(
-        current_user: User = Security(get_current_user, scopes=["me"])
-):
+async def get_current_active_user(current_user: User = Security(get_current_user, scopes=["me"])):
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
@@ -90,12 +82,11 @@ async def get_current_active_user(
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(username=form_data.username, password=form_data.password)
+    user = await authenticate_user(username=form_data.username, password=form_data.password)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
-    access_token_expires = timedelta(minutes=auth.expires)
     access_token = create_access_token(
-        data={"sub": user.username, "scopes": form_data.scopes},
-        expires_delta=access_token_expires,
+        data=dict(sub=user.username, scopes=form_data.scopes),
+        expires_delta=timedelta(minutes=auth.expires),
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return Token(access_token=access_token, token_type="bearer")

@@ -13,11 +13,11 @@ from .settings import Settings, settings
 
 
 class Authorization(object):
-    scopes: dict = {'items': []}
+    context: CryptContext = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    scopes: dict = {'items': 'View user items'}
 
     def __init__(self, algorithm: str = 'HS256', endpoint: str = '/token', expires: int = 30, **kwargs):
         self.algorithm: str = algorithm
-        self.context: CryptContext = CryptContext(schemes=["bcrypt"], deprecated="auto")
         self.endpoint: str = endpoint
         self.expires: int = expires
         self.scopes = {**self.scopes, **kwargs}
