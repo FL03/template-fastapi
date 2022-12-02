@@ -33,6 +33,8 @@ class Authorization(object):
 
 
 class Session(BaseModel):
+    credentials: []
+    state: dict
     settings: Settings = settings()
 
     def info(self): return self.dict()

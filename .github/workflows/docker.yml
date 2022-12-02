@@ -1,0 +1,30 @@
+name: Docker
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*.*.*" ]
+  schedule:
+    - cron: "30 9 * * 5"
+  workflow_dispatch:
+
+env:
+  REGISTRY: hub.docker.com
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: jo3mccain/pzzld
+  IMAGE_TAG: latest
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@v5
+      with:
+        name: jo3mccain/template-fastapi
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        dockerfile: Dockerfile
+        workdir: app

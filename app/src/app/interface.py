@@ -15,7 +15,6 @@ app: FastAPI = FastAPI()
 session: core.Session = core.session()
 settings: core.Settings = session.settings
 
-
 @app.on_event("startup")
 async def startup():
     print("Starting the application...")

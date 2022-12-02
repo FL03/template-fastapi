@@ -19,6 +19,18 @@ sesh = session()
 auth = Authorization()
 
 
+class Authenticator:
+    username: str
+    password: str
+
+    async def get_user(self, username: str) -> UserIn:
+        self.username = username
+        data = await UserIn.from_queryset_single(Users.get(username=username))
+        if data: 
+            return data
+
+
+
 async def get_user(username: str) -> UserIn:
     data = await UserIn.from_queryset_single(Users.get(username=username))
     if data:
