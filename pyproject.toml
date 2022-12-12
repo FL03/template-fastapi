@@ -1,0 +1,26 @@
+[tool.poetry]
+authors = ["Joe McCain III <jo3mccain@scattered-systems.com>"]
+description = ""
+license = "Apache-2.0"
+name = "app"
+packages = [{include = "app", from = "src"}]
+readme = "README.md"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+bcrypt = "^4.0.0"
+cryptography = "^38.0.1"
+fastapi = {extras = ["all"], version = "^0.88.0"}
+flask = "^2.2.2"
+fido2 = "^1.1.0"
+openapi = "^1.1.0"
+passlib = "^1.7.4"
+python = ">=3.8,<=3.11"
+python-dotenv = "^0.21.0"
+python-jose = "^3.3.0"
+tortoise-orm = { extras = ["asyncpg"], version = "^0.19.2" }
+strawberry-graphql = {extras = ["fastapi"], version = "^0.146.0"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

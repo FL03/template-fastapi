@@ -1,0 +1,8 @@
+tasks:
+  - init: |
+      sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y
+      poetry install
+      cp .env.example .env
+    command: poetry run python -m synapse
+
+
