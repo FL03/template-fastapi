@@ -1,4 +1,4 @@
 if __name__ == '__main__':
-    from app.interface import run
+    from synapse.interface import run
 
     run()

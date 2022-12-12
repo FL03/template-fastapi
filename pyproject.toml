@@ -2,7 +2,7 @@
 authors = ["Joe McCain III <jo3mccain@scattered-systems.com>"]
 description = ""
 license = "Apache-2.0"
-name = "app"
+name = "synapse"
 packages = [{include = "app", from = "src"}]
 readme = "README.md"
 version = "0.1.0"

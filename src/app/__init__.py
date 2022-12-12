@@ -1,7 +1,7 @@
-__name__ = 'app'
-__package__ = 'app'
+__name__ = 'synapse'
+__package__ = 'synapse'
 __version__ = '0.1.0'
 
-__import__('app.api', globals(), locals())
-__import__('app.core', globals(), locals())
-__import__('app.data', globals(), locals())
+__import__('synapse.api', globals(), locals())
+__import__('synapse.core', globals(), locals())
+__import__('synapse.data', globals(), locals())
