@@ -4,13 +4,13 @@
 
 ***
 
-synapse
+synapse is built leveraging OpenAI's API to create a data-fluid experience enabling users to make informed decisions regardless of the environment. The microservice is written in Python and built with FastAPI.
 
 ## Getting Started
 
 ### Building from the Source
 
-Make sure you have rust installed on your host system
+Make sure you have poetry installed on your host system
 
 #### *Clone the repository*
 
@@ -21,13 +21,13 @@ git clone https://github.com/FL03/synapse
 #### *Setup the environment*
 
 ```bash
-cargo xtask setup
+poetry install
 ```
 
 #### *Start the application*
 
 ```bash
-cargo xtask start
+poetry run python -m synapse
 ```
 
 ### Docker
@@ -53,12 +53,6 @@ docker run -p 8080:8080 jo3mccain/synapse:latest
 ```
 
 ## Usage
-
-### Builder (xtask)
-
-```bash
-    cargo xtask -h 
-```
 
 ## Contributors
 

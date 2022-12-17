@@ -5,11 +5,8 @@
         ... Summary ...
 """
 from fastapi import APIRouter
-from app.api.endpoints import auth, fido, oai, users
+from synapse.api.endpoints import  users
 
 router = APIRouter(tags=['v1'])
 
-router.include_router(router=auth.router)
-router.include_router(router=fido.router)
-router.include_router(router=oai.router)
 router.include_router(router=users.router)

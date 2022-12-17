@@ -1,8 +1,7 @@
 """
     Appellation: interface
-    Contributors: FL03 <jo3mccain@icloud.com> (https://gitlab.com/FL03)
-    Description:
-        ... Summary ...
+    Contrib: FL03 <jo3mccain@icloud.com>
+    Description: ... Summary ...
 """
 import uvicorn
 from fastapi import FastAPI
@@ -39,12 +38,12 @@ register_tortoise(
     add_exception_handlers=True,
     db_url=settings.db_uri,
     generate_schemas=True,
-    modules=dict(models=['app.data.models'])
+    modules=dict(models=['synapse.data.models'])
 )
 
 
 def run(host: str = "0.0.0.0", port=8080, reload=True):
-    uvicorn.run("app.interface:app", host=host, port=port, reload=reload)
+    uvicorn.run("synapse.interface:app", host=host, port=port, reload=reload)
 
 
 if __name__ == '__main__':

@@ -8,8 +8,8 @@ from fastapi import APIRouter, HTTPException
 from tortoise.contrib.fastapi import HTTPNotFoundError
 from typing import List
 
-from app.data.messages import Status
-from app.data.models import User, UserIn, Users
+from synapse.data.messages import Status
+from synapse.data.models import User, UserIn, Users
 
 router = APIRouter(prefix='/users', tags=['users'])
 

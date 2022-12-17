@@ -1,8 +1,7 @@
 """
     Appellation: session
-    Contributors: FL03 <jo3mccain@icloud.com> (https://gitlab.com/FL03)
-    Description:
-        ... Summary ...
+    Contrib: FL03 <jo3mccain@icloud.com>
+    Description: ... Summary ...
 """
 from fastapi.security import OAuth2PasswordBearer
 from functools import lru_cache
