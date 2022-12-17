@@ -24,7 +24,7 @@ class Server(BaseModel):
 class Settings(BaseSettings):
     db_uri: str = "sqlite://:memory:"
     dev_mode: bool = False
-    secret_token: str
+    openai_secret_token: str
     server: Server = Server(reload=dev_mode)
 
     class Config:

@@ -11,7 +11,7 @@ version = "0.1.0"
 bcrypt = "^4.0.0"
 cryptography = "^38.0.1"
 fastapi = {extras = ["all"], version = "^0.88.0"}
-openapi = "^1.1.0"
+openai = "^0.25.0"
 passlib = "^1.7.4"
 python = ">=3.8,<3.12"
 python-dotenv = "^0.21.0"
