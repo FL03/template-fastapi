@@ -28,8 +28,8 @@ class Settings(BaseSettings):
     server: Server = Server(reload=dev_mode)
 
     class Config:
-        env_file = '.env'
-        env_file_encoding = 'utf-8'
+        env_file = ".env"
+        env_file_encoding = "utf-8"
 
         @classmethod
         def customise_sources(cls, init_settings, env_settings, file_secret_settings):
@@ -37,4 +37,5 @@ class Settings(BaseSettings):
 
 
 @lru_cache
-def settings() -> Settings: return Settings()
+def settings() -> Settings:
+    return Settings()

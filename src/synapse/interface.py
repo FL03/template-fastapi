@@ -14,6 +14,7 @@ app: FastAPI = FastAPI()
 session: core.Session = core.session()
 settings: core.Settings = session.settings
 
+
 @app.on_event("startup")
 async def startup():
     print("Starting the application...")
@@ -38,7 +39,7 @@ register_tortoise(
     add_exception_handlers=True,
     db_url=settings.db_uri,
     generate_schemas=True,
-    modules=dict(models=['synapse.data.models'])
+    modules=dict(models=["synapse.data.models"]),
 )
 
 
@@ -46,5 +47,5 @@ def run(host: str = "0.0.0.0", port=8080, reload=True):
     uvicorn.run("synapse.interface:app", host=host, port=port, reload=reload)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run()

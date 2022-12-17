@@ -13,7 +13,7 @@ cryptography = "^38.0.1"
 fastapi = {extras = ["all"], version = "^0.88.0"}
 openapi = "^1.1.0"
 passlib = "^1.7.4"
-python = ">=3.8"
+python = ">=3.8,<3.12"
 python-dotenv = "^0.21.0"
 python-jose = "^3.3.0"
 tortoise-orm = { extras = ["asyncpg"], version = "^0.19.2" }

@@ -26,4 +26,4 @@ ENV DB_URI="sqlite://:memory:" \
 EXPOSE 80
 EXPOSE 8080
 
-CMD ["poetry", "run", "python", "-m", "app"]
+CMD ["poetry", "run", "python", "-m", "synapse"]

@@ -24,7 +24,17 @@ class Users(Model):
 
     def full_name(self):
         return " ".join(
-            [i for i in [self.prefix_name, self.first_name, self.middle_name, self.last_name, self.suffix_name] if i]
+            [
+                i
+                for i in [
+                    self.prefix_name,
+                    self.first_name,
+                    self.middle_name,
+                    self.last_name,
+                    self.suffix_name,
+                ]
+                if i
+            ]
         )
 
     class Meta:

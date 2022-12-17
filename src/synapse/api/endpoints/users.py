@@ -11,7 +11,7 @@ from typing import List
 from synapse.data.messages import Status
 from synapse.data.models import User, UserIn, Users
 
-router = APIRouter(prefix='/users', tags=['users'])
+router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.get("/", response_model=List[User])
@@ -25,18 +25,30 @@ async def create_user(user: UserIn):
     return await User.from_tortoise_orm(user_obj)
 
 
-@router.get("/user/{user_id}", response_model=User, responses={404: dict(model=HTTPNotFoundError)})
+@router.get(
+    "/user/{user_id}",
+    response_model=User,
+    responses={404: dict(model=HTTPNotFoundError)},
+)
 async def get_user(user_id: int):
     return await User.from_queryset_single(Users.get(id=user_id))
 
 
-@router.put("/user/{user_id}", response_model=User, responses={404: dict(model=HTTPNotFoundError)})
+@router.put(
+    "/user/{user_id}",
+    response_model=User,
+    responses={404: dict(model=HTTPNotFoundError)},
+)
 async def update_user(user_id: int, user: UserIn):
     await Users.filter(id=user_id).update(**user.dict(exclude_unset=True))
     return await User.from_queryset_single(Users.get(id=user_id))
 
 
-@router.delete("/user/{user_id}", response_model=Status, responses={404: dict(model=HTTPNotFoundError)})
+@router.delete(
+    "/user/{user_id}",
+    response_model=Status,
+    responses={404: dict(model=HTTPNotFoundError)},
+)
 async def delete_user(user_id: int):
     deleted_count = await Users.filter(id=user_id).delete()
     if not deleted_count:
