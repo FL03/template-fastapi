@@ -41,7 +41,7 @@ jobs:
       uses: elgohr/Publish-Docker-Github-Action@v5
       with:
         dockerfile: ${{ matrix.dockerfile }}
-        name: ${{ matrix.image }}
+        name: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         snapshot: true
         tags: latest
