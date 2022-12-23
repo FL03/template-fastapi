@@ -1,28 +1,48 @@
 name: Docker
 
 on:
+  pull_request:
+    branches: [ "main", "master", "prod*" ]
+    tags: [ "v*.*.*" ]
   push:
     branches: [ "main", "master", "prod*" ]
-    tags: [ "prod*", "nightly*", "v*.*.*" ]
+    tags: [ "v*.*.*" ]
   schedule:
-    - cron: "30 9 * * 5"
+    - cron: "30 9 * * *"
   workflow_dispatch:
 
 env:
-  DOCKERHUB_USERNAME: jo3mccain
-  IMAGE_NAME: synapse
+  IMAGE: synapse
   IMAGE_TAG: latest
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dockerfile: [ . ]
+        image: [ synapse ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker buildx build --tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }} ${{ matrix.dockerfile }}
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dockerfile: [ Dockerfile ]
+        image: [ synapse ]
     steps:
     - uses: actions/checkout@v3
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@v5
       with:
-        dockerfile: Dockerfile
-        name: ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+        dockerfile: ${{ matrix.dockerfile }}
+        name: ${{ matrix.image }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         snapshot: true
-        username: ${{ env.DOCKERHUB_USERNAME }}  
+        tags: latest
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
