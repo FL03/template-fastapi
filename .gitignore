@@ -1,9 +1,17 @@
+# Config
+**/config.*
+**/*.config.*
+
+**/*.env
+**/*.env.*
+
 # Directories
 **/__pycache__/
 **/__sapper__/
 
 **/.DS_STORE/
 **/.artifacts/data/
+**/.cache/
 **/.dist/
 **/.docker/data/
 **/.idea/
@@ -17,9 +25,7 @@
 **/dist/
 **/env/
 **/node_modules/
-**/pkg/
 **/target/
-**/tmp/
 **/venv/
 
 # File Extensions
@@ -48,3 +54,8 @@
 **/*.zip
 **/*.zip.*
 
+# Exceptions
+!**/default.config.*
+!**/*.env.example
+!**/*.config.js
+!**/*.config.cjs
