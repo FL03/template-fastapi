@@ -9,7 +9,7 @@ from tortoise.contrib.pydantic import pydantic_model_creator
 
 
 class Users(Model):
-    id = fields.CharField(max_length=256, pk=True)
+    id = fields.IntField(pk=True)
     prefix_name = fields.CharField(max_length=128, null=True)
     first_name = fields.CharField(max_length=128, null=True)
     middle_name = fields.CharField(max_length=128, null=True)
@@ -36,10 +36,6 @@ class Users(Model):
                 if i
             ]
         )
-
-    class Meta:
-        computed = ["full_name"]
-        exclude = ["hashed_password"]
 
     class PydanticMeta:
         computed = ["full_name"]

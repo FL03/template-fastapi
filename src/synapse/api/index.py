@@ -5,7 +5,7 @@
         ... Summary ...
 """
 from fastapi import APIRouter
-from synapse.api.endpoints import oai, users
+from synapse.api.routes import oai, users
 
 router = APIRouter(tags=["v1"])
 router.include_router(router=oai.router)

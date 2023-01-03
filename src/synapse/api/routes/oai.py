@@ -23,7 +23,7 @@ async def chatgpt3_completion(prompt: str, temp: int = 0, max_tokens: int = 7):
     completion = openai.Completion.create(
         model="text-davinci-003", prompt=prompt, temperature=temp, max_tokens=max_tokens
     )
-    return [dict(i) for i in completion.choices]
+    return [dict(i) for i in completion.choices.text]
 
 
 @router.get("/codex/{prompt}")

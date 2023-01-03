@@ -21,9 +21,9 @@ FROM builder as runner
 
 ENV DB_URI="sqlite://:memory:" \
     SECRET_TOKEN="some_token" \
-    SERVER_POST=8080
+    SERVER_PORT=8080
 
 EXPOSE 80
-EXPOSE 8080
+EXPOSE ${SERVER_PORT}
 
 CMD ["poetry", "run", "python", "-m", "synapse"]
