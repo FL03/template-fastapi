@@ -9,7 +9,7 @@ from typing import List, Dict
 from synapse.data.messages import Status
 import openai, os
 
-openai.api_key = os.getenv("OPENAI_SECRET_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEY")
 router = APIRouter(prefix="/openai", tags=["openai"])
 
 

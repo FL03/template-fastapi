@@ -21,6 +21,7 @@ async def get_users():
 
 @router.post("/user", response_model=User)
 async def create_user(user: UserIn):
+    
     user_obj = await Users.create(**user.dict(exclude_unset=True))
     return await User.from_tortoise_orm(user_obj)
 
