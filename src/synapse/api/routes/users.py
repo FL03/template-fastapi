@@ -4,10 +4,11 @@
     Description:
         ... Summary ...
 """
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, Form, HTTPException
 from tortoise.contrib.fastapi import HTTPNotFoundError
 from typing import List
 
+from synapse.api.routes.auth import get_current_active_user, auth
 from synapse.data.messages import Status
 from synapse.data.models import User, UserIn, Users
 
@@ -20,19 +21,19 @@ async def get_users():
 
 
 @router.post("/user", response_model=User)
-async def create_user(user: UserIn):
-    
-    user_obj = await Users.create(**user.dict(exclude_unset=True))
+async def create_user(username: str = Form(), password: str = Form()):
+    hashed_password = auth.hash_password(password)
+    user_obj = await Users.create(**dict(username=username, hashed_password=hashed_password))
     return await User.from_tortoise_orm(user_obj)
 
 
 @router.get(
-    "/user/{user_id}",
+    "/user/{uid}",
     response_model=User,
     responses={404: dict(model=HTTPNotFoundError)},
 )
-async def get_user(user_id: int):
-    return await User.from_queryset_single(Users.get(id=user_id))
+async def get_user(uid: int):
+    return await User.from_queryset_single(Users.get(id=uid))
 
 
 @router.put(
@@ -40,7 +41,7 @@ async def get_user(user_id: int):
     response_model=User,
     responses={404: dict(model=HTTPNotFoundError)},
 )
-async def update_user(user_id: int, user: UserIn):
+async def update_user(user_id: int, usr: User = Depends(get_current_active_user)):
     await Users.filter(id=user_id).update(**user.dict(exclude_unset=True))
     return await User.from_queryset_single(Users.get(id=user_id))
 
@@ -50,8 +51,8 @@ async def update_user(user_id: int, user: UserIn):
     response_model=Status,
     responses={404: dict(model=HTTPNotFoundError)},
 )
-async def delete_user(user_id: int):
-    deleted_count = await Users.filter(id=user_id).delete()
+async def delete_user(user_id, usr: User = Depends(get_current_active_user)):
+    deleted_count = await Users.filter(id=usr.id).delete()
     if not deleted_count:
         raise HTTPException(status_code=404, detail=f"User {user_id} not found")
     return Status(message=f"Deleted user {user_id}")

@@ -4,11 +4,14 @@
     Description:
         ... Summary ...
 """
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from synapse.api.routes import auth, oai, payments, users
+
+from synapse.api.routes.auth import get_current_active_user
 
 router = APIRouter(tags=["v1"])
 router.include_router(router=auth.router)
-router.include_router(router=oai.router)
+router.include_router(router=oai.router, dependencies=[Depends(get_current_active_user)])
+# router.include_router(router=oai.router)
 router.include_router(router=payments.router)
 router.include_router(router=users.router)

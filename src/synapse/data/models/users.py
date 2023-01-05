@@ -16,7 +16,7 @@ class Users(Model):
     last_name = fields.CharField(max_length=128, null=True)
     suffix_name = fields.CharField(max_length=128, null=True)
     ensname = fields.CharField(max_length=128, null=True)
-    hashed_password = fields.CharField(max_length=128, null=True)
+    hashed_password = fields.CharField(max_length=256, null=False)
     username = fields.CharField(max_length=128, null=True)
 
     created = fields.DatetimeField(auto_now_add=True)
@@ -39,7 +39,7 @@ class Users(Model):
 
     class PydanticMeta:
         computed = ["full_name"]
-        exclude = ["hashed_password"]
+        # exclude = ["hashed_password"]
 
 
 User = pydantic_model_creator(Users, name="User")

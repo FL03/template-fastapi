@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from typing import Union
 
 from synapse.core import Authorization, session
-from synapse.data.models import User, UserIn, Users, Token, TokenIn
+from synapse.data.models import User, UserIn, Users, Token, TokenIn, Tokens
 
 router = APIRouter(tags=['auth'])
 sesh = session()
@@ -47,13 +47,13 @@ class AccessToken(object):
         return jwt.encode(to_encode, sesh.settings.secret_token, algorithm=auth.algorithm)
 
 
-async def get_user(username: str) -> UserIn:
-    data = await UserIn.from_queryset_single(Users.get(username=username))
+async def get_user(username: str) -> User:
+    data = await User.from_queryset_single(Users.get(username=username))
     if data:
         return data
 
 
-async def authenticate_user(username: str, password: str) -> UserIn:
+async def authenticate_user(username: str, password: str) -> User:
     user = await get_user(username)
     if user and auth.verify_password(password, user.hashed_password):
         return user
@@ -117,4 +117,4 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         data=dict(sub=user.username, scopes=form_data.scopes),
         expires_delta=timedelta(minutes=auth.expires),
     )
-    return Token(access_token=access_token, token_type="bearer")
+    return await Tokens.create(**dict(access_token=access_token, token_type="bearer"))

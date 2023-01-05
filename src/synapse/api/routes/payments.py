@@ -13,9 +13,13 @@ import os
 # from flask import Flask, render_template, jsonify, request, send_from_directory, redirect
 from dotenv import load_dotenv, find_dotenv
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Cookie, Form, Request
+from fastapi.responses import RedirectResponse
+from typing import Union
 
-router = APIRouter(tags=["payments", "stripe"])
+from synapse.core import session
+router = APIRouter(tags=["payments"])
+sesh = session()
 
 # For sample support and debugging, not required for production:
 stripe.set_app_info(
@@ -23,7 +27,7 @@ stripe.set_app_info(
     version='0.1.0',
     url='https://github.com/FL03/synapse')
 
-stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
+stripe.api_key = sesh.settings.stripe_secret_key
 
 # static_dir = str(os.path.abspath(os.path.join(
 #     __file__, "..", os.getenv("STATIC_DIR"))))
@@ -32,30 +36,29 @@ stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
 @router.get('/')
 def get_example():
-    return render_template('index.html')
+    return dict(message="Welcome")
 
 
 @router.get('/config')
 def get_publishable_key():
-    return jsonify({
-        'publishableKey': os.getenv('STRIPE_PUBLIC_KEY'),
+    return {
+        'publishableKey': sesh.settings.stripe_public_key,
         'basicPrice': os.getenv('BASIC_PRICE_ID'),
         'proPrice': os.getenv('PRO_PRICE_ID')
-    })
+    }
 
 
 # Fetch the Checkout Session to display the JSON result on the success page
 @router.get('/checkout-session')
-def get_checkout_session():
-    id = request.args.get('sessionId')
-    checkout_session = stripe.checkout.Session.retrieve(id)
-    return jsonify(checkout_session)
+def get_checkout_session(sesh: str):
+    checkout_session = stripe.checkout.Session.retrieve(sesh)
+    return checkout_session
 
 
 @router.post('/create-checkout-session')
-def create_checkout_session():
-    price = request.form.get('priceId')
-    domain_url = os.getenv('DOMAIN')
+def create_checkout_session(price: str = Form()):
+    # price = request.form.get('priceId')
+    domain_url = sesh.settings.domain
 
     try:
         # Create new Checkout Session for the order
@@ -77,27 +80,26 @@ def create_checkout_session():
                 'quantity': 1
             }],
         )
-        return redirect(checkout_session.url, code=303)
+        return RedirectResponse(checkout_session.url)
     except Exception as e:
-        return jsonify({'error': {'message': str(e)}}), 400
+        return {'error': {'message': str(e)}}
 
 
 @router.post('/customer-portal')
-def customer_portal():
+def customer_portal(sid: Union[str, None] = Cookie(default=None)):
     # For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
     # Typically this is stored alongside the authenticated user in your database.
-    checkout_session_id = request.form.get('sessionId')
-    checkout_session = stripe.checkout.Session.retrieve(checkout_session_id)
+    checkout_session = stripe.checkout.Session.retrieve(sid)
 
     # This is the URL to which the customer will be redirected after they are
     # done managing their billing with the portal.
-    return_url = os.getenv("DOMAIN")
+    return_url = sesh.settings.domain
 
     session = stripe.billing_portal.Session.create(
         customer=checkout_session.customer,
         return_url=return_url,
     )
-    return redirect(session.url, code=303)
+    return RedirectResponse(session.url)
 
 
 @router.post('/webhook')
@@ -128,7 +130,7 @@ def webhook_received():
     if event_type == 'checkout.session.completed':
         print('🔔 Payment succeeded!')
 
-    return jsonify({'status': 'success'})
+    return {'status': 'success'}
 
 
 if __name__ == '__main__':
