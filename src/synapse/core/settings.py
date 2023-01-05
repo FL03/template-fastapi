@@ -26,7 +26,8 @@ class Settings(BaseSettings):
     dev_mode: bool = False
     openai_api_key: str
     server: Server = Server(reload=dev_mode)
-
+    stripe_secret_key: str
+    
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
