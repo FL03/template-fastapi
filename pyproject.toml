@@ -1,5 +1,5 @@
 [tool.poetry]
-authors = ["Joe McCain III <jo3mccain@scattered-systems.com>"]
+authors = ["FL03 <j03mccain@icloud.com>"]
 description = ""
 license = "Apache-2.0"
 name = "synapse"
@@ -9,15 +9,16 @@ version = "0.1.0"
 
 [tool.poetry.dependencies]
 bcrypt = "^4.0.0"
-cryptography = "^38.0.1"
+cryptography = "^39.0.0"
 fastapi = {extras = ["all"], version = "^0.88.0"}
 openai = "^0.25.0"
 passlib = "^1.7.4"
 python = ">=3.8,<3.12"
 python-dotenv = "^0.21.0"
 python-jose = "^3.3.0"
+strawberry-graphql = {extras = ["fastapi"], version = "^0.151.2"}
+stripe = "^5.0.0"
 tortoise-orm = { extras = ["asyncpg"], version = "^0.19.2" }
-strawberry-graphql = {extras = ["fastapi"], version = "^0.146.0"}
 
 [tool.poetry.dev-dependencies]
 black = "22.12.0"
