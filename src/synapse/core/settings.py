@@ -24,9 +24,13 @@ class Server(BaseModel):
 class Settings(BaseSettings):
     db_uri: str = "sqlite://:memory:"
     dev_mode: bool = False
+    domain: str = "http://localhost:8080"
     openai_api_key: str
     server: Server = Server(reload=dev_mode)
-
+    secret_token: str
+    stripe_public_key: str
+    stripe_secret_key: str
+    
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
