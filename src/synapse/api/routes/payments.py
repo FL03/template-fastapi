@@ -5,35 +5,25 @@ server.py
 Stripe Sample.
 Python 3.6 or newer required.
 """
-
 import stripe
 import json
 import os
-
-# from flask import Flask, render_template, jsonify, request, send_from_directory, redirect
-from dotenv import load_dotenv, find_dotenv
 
 from fastapi import APIRouter, Cookie, Form, Request
 from fastapi.responses import RedirectResponse
 from typing import Union
 
 from synapse.core import session
-router = APIRouter(tags=["payments"])
+
+
+router = APIRouter(prefix="/pay", tags=["payments"])
 sesh = session()
 
-# For sample support and debugging, not required for production:
-stripe.set_app_info(
-    'FL03/synapse',
-    version='0.1.0',
-    url='https://github.com/FL03/synapse')
-
+# Authenticate the application
 stripe.api_key = sesh.settings.stripe_secret_key
 
-# static_dir = str(os.path.abspath(os.path.join(
-#     __file__, "..", os.getenv("STATIC_DIR"))))
 
-
-
+# Get the base endpoint
 @router.get('/')
 def get_example():
     return dict(message="Welcome")
@@ -131,7 +121,3 @@ def webhook_received():
         print('🔔 Payment succeeded!')
 
     return {'status': 'success'}
-
-
-if __name__ == '__main__':
-    app.run(port=4242)
