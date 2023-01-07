@@ -14,7 +14,7 @@ import os
 import logging
 from html import escape
 from uuid import uuid4
-
+from synapse.api.routes.oai import create_completion, clean_completion
 from telegram import __version__ as TG_VER
 
 try:
@@ -38,49 +38,39 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    res = update.message.text
+    """Send a message when the command /start is issued."""
+    await update.message.reply_text(res)
 
 # Define a few command handlers. These usually take the two arguments update and
 # context.
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def chatgpt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    prompt = update.message.text
+    res = clean_completion(create_completion("text-davinci-003", prompt, temperature=0.5, max_tokens=2000))
     """Send a message when the command /start is issued."""
-    await update.message.reply_text("Hi!")
+    await update.message.reply_text(res)
 
+async def codex(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    prompt = update.message.text
+    res = clean_completion(create_completion("text-davinci-002", prompt, temperature=0.5, max_tokens=2000))
+    """Send a message when the command /start is issued."""
+    await update.message.reply_text(res)
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /help is issued."""
-    await update.message.reply_text("Help!")
+    msg = f"""
+    Puzzled (@pzzldbot)
+        An intelligent bot for quickly summarizing content in almost any medium leveraging OpenAI's text-davinci-003 (ChatGPT) engine.
+        Additionally, the codex is included as well just less emphasized within the scope of the project.
+    ---
+    /chatgpt
+    /codex
+    /start
+    /help brings up this message
 
-
-async def inline_query(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Handle the inline query. This is run when you type: @botusername <query>"""
-    query = update.inline_query.query
-
-    if query == "":
-        return
-
-    results = [
-        InlineQueryResultArticle(
-            id=str(uuid4()),
-            title="Caps",
-            input_message_content=InputTextMessageContent(query.upper()),
-        ),
-        InlineQueryResultArticle(
-            id=str(uuid4()),
-            title="Bold",
-            input_message_content=InputTextMessageContent(
-                f"<b>{escape(query)}</b>", parse_mode=ParseMode.HTML
-            ),
-        ),
-        InlineQueryResultArticle(
-            id=str(uuid4()),
-            title="Italic",
-            input_message_content=InputTextMessageContent(
-                f"<i>{escape(query)}</i>", parse_mode=ParseMode.HTML
-            ),
-        ),
-    ]
-
-    await update.inline_query.answer(results)
+    """
+    await update.message.reply_text(msg)
 
 
 def bot() -> None:
@@ -91,10 +81,10 @@ def bot() -> None:
 
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("chatgpt", chatgpt))
+    application.add_handler(CommandHandler("codex", codex))
     application.add_handler(CommandHandler("help", help_command))
-
-    # on non command i.e message - echo the message on Telegram
-    application.add_handler(InlineQueryHandler(inline_query))
+    
 
     # Run the bot until the user presses Ctrl-C
     application.run_polling()
