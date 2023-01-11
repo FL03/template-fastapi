@@ -10,7 +10,7 @@ version = "0.1.0"
 [tool.poetry.dependencies]
 bcrypt = "^4.0.0"
 cryptography = "^38.0.1"
-fastapi = {extras = ["all"], version = "^0.88.0"}
+fastapi = {extras = ["all"], version = "^0.89.1"}
 flask = "^2.2.2"
 fido2 = "^1.1.0"
 passlib = "^1.7.4"
