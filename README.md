@@ -1,6 +1,6 @@
-# synapse
+# template-fastapi
 
-[![Docker](https://github.com/FL03/synapse/actions/workflows/docker.yml/badge.svg)](https://github.com/FL03/synapse/actions/workflows/docker.yml)
+[![Docker](https://github.com/FL03/template-fastapi/actions/workflows/docker.yml/badge.svg)](https://github.com/FL03/template-fastapi/actions/workflows/docker.yml)
 
 ***
 
@@ -15,7 +15,7 @@ Make sure you have poetry installed on your host system
 #### *Clone the repository*
 
 ```bash
-git clone https://github.com/FL03/synapse
+git clone https://github.com/FL03/template-fastapi
 ```
 
 #### *Setup the environment*
@@ -37,19 +37,19 @@ Make sure you have docker installed on the target system
 #### *Pull the image*
 
 ```bash
-docker pull jo3mccain/synapse:latest
+docker pull jo3mccain/template-fastapi:latest
 ```
 
 #### *Build the image locally (optional)*
 
 ```bash
-docker buildx build --tag jo3mccain/synapse:latest .
+docker buildx build --tag jo3mccain/template-fastapi:latest .
 ```
 
 #### *Run the image*
 
 ```bash
-docker run -p 8080:8080 jo3mccain/synapse:latest
+docker run -p 8080:8080 jo3mccain/template-fastapi:latest
 ```
 
 ## Usage
