@@ -8,7 +8,7 @@ readme = "README.md"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-bcrypt = "4"
+bcrypt = "4.0.1"
 cryptography = "40.0.2"
 fastapi = { extras = ["all"], version = "0.95.1" }
 openai = "0.27.4"
