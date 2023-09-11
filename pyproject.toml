@@ -20,7 +20,7 @@ strawberry-graphql = {extras = ["fastapi"], version = "0.203.3"}
 tortoise-orm = { extras = ["asyncpg"], version = "0.19.3" }
 
 [tool.poetry.dev-dependencies]
-black = "23.3.0"
+black = "23.9.1"
 
 [build-system]
 requires = ["poetry-core"]
