@@ -17,7 +17,7 @@ python = ">=3.8,<3.12"
 python-dotenv = "1.0.0"
 python-jose = "3.3"
 strawberry-graphql = {extras = ["fastapi"], version = "0.206.0"}
-tortoise-orm = { extras = ["asyncpg"], version = "0.19.3" }
+tortoise-orm = { extras = ["asyncpg"], version = "0.20.0" }
 
 [tool.poetry.dev-dependencies]
 black = "23.9.1"
