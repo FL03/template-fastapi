@@ -10,7 +10,7 @@ version = "0.1.0"
 [tool.poetry.dependencies]
 bcrypt = "4.0.1"
 cryptography = "41.0.3"
-fastapi = { extras = ["all"], version = "0.101.1" }
+fastapi = { extras = ["all"], version = "0.103.1" }
 openai = "0.27.7"
 passlib = "1.7.4"
 python = ">=3.8,<3.12"
